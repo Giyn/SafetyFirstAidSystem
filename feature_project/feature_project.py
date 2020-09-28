@@ -9,7 +9,7 @@ import pandas as pd
 import csv
 
 for num in range(13):
-    path = 'D:\pycharm code/SmartSafetyHelmet/split_data/data_spilt_by_label/df_label_'+str(num)+'.csv'
+    path = '../data_spilt_by_label/df_label_' + str(num) + '.csv'
     df_total_length = pd.read_csv(path, encoding='utf-8').shape[0]
     flag = True
     n = 0
@@ -342,8 +342,8 @@ for num in range(13):
             add_dataframe.loc[:]['gry_yz_cor'] = gry_y_total_pd.corr(gry_z_total_pd)
             add_dataframe.loc[:]['gry_xy_cor'] = gry_x_total_pd.corr(gry_y_total_pd)
 
-            # res = pd.concat([fr,add_dataframe],axis=1)\
-            path2 = 'D:\pycharm code\SmartSafetyHelmet/add_data/add_data' + str(n + 1) + '_'+str(num)+'.csv'
+            # res = pd.concat([fr,add_dataframe],axis=1)
+            path2 = '../data/processed_data/add_data' + str(n + 1) + '_' + str(num) + '.csv'
             flag_csv = os.path.isfile(path2)
 
             with open(path2, 'a', newline='') as f:
@@ -373,5 +373,3 @@ for num in range(13):
                     writer.writerow(data)
 
         n = n + 1
-
-
