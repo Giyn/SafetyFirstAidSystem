@@ -26,14 +26,14 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 
 # hyper parameter
-NUM = 1000  # the data length
-DROP_OUT1 = 0.4
+NUM = 1000000  # the data length
+DROP_OUT1 = 0.1
 DROP_OUT2 = 0.1
 LR = 0.001  # learning rate
-LOAD_NAME = r'../trained_model/BP_3.h5'
-SAVE_NAME = r'../trained_model/BP_4.h5'
+LOAD_NAME = r'../model/BP_5.h5'
+SAVE_NAME = r'../model/BP_6.h5'
 EPOCHS = 10
-BATCH_SIZE = 10
+BATCH_SIZE = 20
 LOAD_MODEL_FLAG = 0  # whether load model
 SAVE_MODEL_FLAG = 1  # whether save model
 
@@ -68,7 +68,7 @@ def data_preprocess(data, label):
     """
 
     data = data.reshape(-1, 6)
-    data = normalization(data)
+    # data = normalization(data)
 
     for i in label:
         i = int(i)  # transform into int
@@ -76,12 +76,12 @@ def data_preprocess(data, label):
     # convert to one-hot code
     y_new = []
     for line in label:
-        temp = [0, 0, 0, 0, 0, 0, 0]
-        temp[int(line)] = 1
+        temp = [0, 0, 0, 0]
+        temp[int(line) - 1] = 1
         y_new.append(temp)
 
     y_new = np.array(y_new)
-    y_new = y_new.reshape(-1, 7)
+    y_new = y_new.reshape(-1, 4)
     print(y_new)
 
     t = pd.DataFrame(y_new)
@@ -107,16 +107,20 @@ def train_data(X_train, y_train, X_test, y_test):
     #                         betas=2.0,
     #                         input_shape=(6,))
     # model.add(rbflayer)
-    # #the hidden layer
-    # model.add(layers.Dense(10,input_dim=6,activation='sigmoid',kernel_regularizer='L2'))
+    # the hidden layer
+    # model.add(tf.keras.layers.Dense(10,input_dim=6,activation='sigmoid',kernel_regularizer='L2'))
     # #the output layer
     # model.add(layers.Dense(7,activation='sigmoid',use_bias=True))
 
-    model.add(tf.keras.layers.Dense(4, activation='relu', input_shape=(6,)))
+    model.add(tf.keras.layers.Dense(10, kernel_regularizer=tf.keras.regularizers.l2(0.01), use_bias=True,
+                                    activation='softmax', input_shape=(6,)))
+    model.add(tf.keras.layers.Dropout(DROP_OUT1))
 
-    model.add(tf.keras.layers.Dense(6, activation='relu'))
+    # model.add(tf.keras.layers.Dense(14,kernel_regularizer=tf.keras.regularizers.l2(0.001) ,use_bias=True,activation='relu'))
+    # model.add(tf.keras.layers.Dropout(DROP_OUT2))
 
-    model.add(tf.keras.layers.Dense(7, activation='softmax'))
+    model.add(tf.keras.layers.Dense(4, kernel_regularizer=tf.keras.regularizers.l2(0.01), use_bias=True,
+                                    activation='softmax'))
 
     model.compile(optimizer=tf.keras.optimizers.Adam(LR),
                   loss=tf.keras.losses.binary_crossentropy,
@@ -163,12 +167,12 @@ if __name__ == "__main__":
     print("----Start----")
 
     # read the csv
-    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'], axis=1)
     df = df.reindex(np.random.permutation(df.index))[:NUM]  # random the data
 
     # data preprocess
     label = np.array(df.loc[:, 'label'])
-    data = np.array(df.iloc[:, 0:-1])
+    data = np.array(df.iloc[:, 0:6])
 
     data, y_new = data_preprocess(data, label)
 
