@@ -38,20 +38,20 @@ def data_preprocess(data, label):
 
     """
     data = data.reshape(-1, 6)
-    data = normalization(data)
+    # data = normalization(data)
     y_new = []
     for line in label:
-        temp = [0, 0, 0, 0, 0, 0, 0]
+        temp = [0, 0, 0, 0, ]
 
-        temp[int(line)] = 1
+        temp[int(line) - 1] = 1
         y_new.append(temp)
     y_new = np.array(y_new)
-    y_new = y_new.reshape(-1, 7)
+    y_new = y_new.reshape(-1, 4)
 
     return data, y_new
 
 
-def evaluate(model, y_new):
+def evaluate(model, data, y_new):
     """
     evaluate the model
 
@@ -67,7 +67,7 @@ def evaluate(model, y_new):
     y_p_new = []
     for line in y_p:
         index = np.argmax(line)
-        temp = [0, 0, 0, 0, 0, 0, 0]
+        temp = [0, 0, 0, 0]
 
         temp[index] = 1
         y_p_new.append(temp)
@@ -85,19 +85,19 @@ def evaluate(model, y_new):
 if __name__ == "__main__":
     print("----Start----")
 
-    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'], axis=1)
     df = df.reindex(np.random.permutation(df.index))[:1000]  # random the data
 
     # data preprocess
     label = np.array(df.loc[:, 'label'])
-    data = np.array(df.iloc[:, 1:], dtype=float)
+    data = np.array(df.iloc[:, 0:6], dtype=float)
 
     data, y_new = data_preprocess(data, label)
 
     model = tf.keras.Sequential()
-    model = tf.keras.models.load_model(r'../trained_model/BP_4.h5', custom_objects={'RBFLayer': RBFLayer})
+    model = tf.keras.models.load_model(r'../model/BP_5.h5', custom_objects={'RBFLayer': RBFLayer})
     # np.set_printoptions(precision=4)
 
-    evaluate(model, y_new)
+    evaluate(model, data, y_new)
 
     print("----End------")
