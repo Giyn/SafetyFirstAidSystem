@@ -42,11 +42,13 @@ model.add(Dense(6, activation='relu'))
 
 model.add(Dense(3, activation='softmax'))
 
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam',
+              metrics=['accuracy'])
 
 i = 100
 
-history = model.fit(X_train, X_test, validation_data=(Y_train, Y_test), batch_size=10,
+history = model.fit(X_train, X_test, validation_data=(Y_train, Y_test),
+                    batch_size=10,
                     epochs=i)  # epochs=20表示模型反复训练20次，
 train_result = history.history
 
