@@ -30,8 +30,8 @@ NUM = 1000000  # the data length
 DROP_OUT1 = 0.1
 DROP_OUT2 = 0.1
 LR = 0.001  # learning rate
-LOAD_NAME = r'../model/BP_5.h5'
-SAVE_NAME = r'../model/BP_6.h5'
+LOAD_NAME = r'../model/RBF_5.h5'
+SAVE_NAME = r'../model/RBF_6.h5'
 EPOCHS = 10
 BATCH_SIZE = 20
 LOAD_MODEL_FLAG = 0  # whether load model
@@ -112,14 +112,18 @@ def train_data(X_train, y_train, X_test, y_test):
     # #the output layer
     # model.add(layers.Dense(7,activation='sigmoid',use_bias=True))
 
-    model.add(tf.keras.layers.Dense(10, kernel_regularizer=tf.keras.regularizers.l2(0.01), use_bias=True,
+    model.add(tf.keras.layers.Dense(10,
+                                    kernel_regularizer=tf.keras.regularizers.l2(
+                                        0.01), use_bias=True,
                                     activation='softmax', input_shape=(6,)))
     model.add(tf.keras.layers.Dropout(DROP_OUT1))
 
     # model.add(tf.keras.layers.Dense(14,kernel_regularizer=tf.keras.regularizers.l2(0.001) ,use_bias=True,activation='relu'))
     # model.add(tf.keras.layers.Dropout(DROP_OUT2))
 
-    model.add(tf.keras.layers.Dense(4, kernel_regularizer=tf.keras.regularizers.l2(0.01), use_bias=True,
+    model.add(tf.keras.layers.Dense(4,
+                                    kernel_regularizer=tf.keras.regularizers.l2(
+                                        0.01), use_bias=True,
                                     activation='softmax'))
 
     model.compile(optimizer=tf.keras.optimizers.Adam(LR),
@@ -127,14 +131,16 @@ def train_data(X_train, y_train, X_test, y_test):
                   metrics=[tf.keras.metrics.categorical_accuracy])
 
     if (LOAD_MODEL_FLAG):
-        model = tf.keras.models.load_model(LOAD_NAME, custom_objects={'RBFLayer': RBFLayer})
+        model = tf.keras.models.load_model(LOAD_NAME, custom_objects={
+            'RBFLayer': RBFLayer})
 
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', patience=10, mode='auto')
 
     class_weight = {}
     # history = model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE,
     #              validation_data=(X_test, y_test), validation_freq=1,callbacks=[reduce_lr],shuffle = True,workers = 2,)
-    history = model.fit(X_train, y_train, validation_data=(X_test, y_test), batch_size=BATCH_SIZE, epochs=EPOCHS)
+    history = model.fit(X_train, y_train, validation_data=(X_test, y_test),
+                        batch_size=BATCH_SIZE, epochs=EPOCHS)
 
     model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
 
@@ -167,7 +173,8 @@ if __name__ == "__main__":
     print("----Start----")
 
     # read the csv
-    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'],
+                                                              axis=1)
     df = df.reindex(np.random.permutation(df.index))[:NUM]  # random the data
 
     # data preprocess
@@ -177,7 +184,10 @@ if __name__ == "__main__":
     data, y_new = data_preprocess(data, label)
 
     # split the data
-    X_train, X_test, y_train, y_test = model_selection.train_test_split(data, y_new, shuffle=False, test_size=0.3)
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(data,
+                                                                        y_new,
+                                                                        shuffle=False,
+                                                                        test_size=0.3)
 
     # train the model
     model, history = train_data(X_train, y_train, X_test, y_test)
