@@ -25,7 +25,9 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 model = tf.keras.Sequential()
 
-model.add(layers.LSTM(52, input_shape=(128, 80), return_sequences=True, use_bias=True, dropout=0.1))
+model.add(
+    layers.LSTM(52, input_shape=(128, 80), return_sequences=True, use_bias=True,
+                dropout=0.1))
 # model.add(layers.LSTM(52,input_shape=(256,),use_bias=True,dropout=0.1,return_sequences=True))
 model.add(layers.LSTM(26, input_shape=(52,), use_bias=True, dropout=0.1))
 
@@ -37,8 +39,10 @@ model.compile(optimizer=tf.keras.optimizers.Adam(0.000001),
 total_data_list = []
 for i in range(13):
     print('第{}次读取'.format(i + 1))
-    df = pd.read_csv(r'../data/processed_data_by_label/processed_data_label_{}.csv'.format(str(i))).drop(['id', 'x'],
-                                                                                                      axis=1)
+    df = pd.read_csv(
+        r'../data/processed_data_by_label/processed_data_label_{}.csv'.format(
+            str(i))).drop(['id', 'x'],
+                          axis=1)
 
     data_array = df.values
     data_length = data_array.shape[0]
@@ -80,7 +84,9 @@ y_new = np.array(y_new)
 # print(y_new)
 
 
-X_train, X_test, y_train, y_test = model_selection.train_test_split(data, y_new, shuffle=False, test_size=0.3)
+X_train, X_test, y_train, y_test = model_selection.train_test_split(data, y_new,
+                                                                    shuffle=False,
+                                                                    test_size=0.3)
 # print(X_train.shape)
 
 
@@ -91,7 +97,8 @@ X_train, X_test, y_train, y_test = model_selection.train_test_split(data, y_new,
 reduce_lr = ReduceLROnPlateau(monitor='val_loss', patience=10, mode='auto')
 
 model.fit(X_train, y_train, epochs=1, batch_size=128,
-          validation_data=(X_test, y_test), validation_freq=1, callbacks=[reduce_lr], shuffle=True, workers=2)
+          validation_data=(X_test, y_test), validation_freq=1,
+          callbacks=[reduce_lr], shuffle=True, workers=2)
 
 # model.evaluate(X_test, y_test, batch_size=32)
 y_p = model.predict(X_test, batch_size=32)

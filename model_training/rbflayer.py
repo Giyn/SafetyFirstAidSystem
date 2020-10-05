@@ -1,11 +1,8 @@
 """
 -------------------------------------------------
 # @Time: 2020/9/28 9:50
-# @USER: 86199
 # @File: rbflayer
 # @Software: PyCharm
-# @license: Copyright(C), xxxCompany
-# @Author: 张平路
 -------------------------------------------------
 """
 import random
@@ -13,7 +10,8 @@ import random
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Layer
 from sklearn.cluster import KMeans
-from tensorflow.keras.initializers import RandomUniform, Initializer, Orthogonal, Constant
+from tensorflow.keras.initializers import RandomUniform, Initializer, \
+    Orthogonal, Constant
 import numpy as np
 
 
@@ -87,7 +85,8 @@ class RBFLayer(Layer):
                                        trainable=True)
         self.betas = self.add_weight(name='betas',
                                      shape=(self.num_outputs,),
-                                     initializer=Constant(value=self.init_betas),
+                                     initializer=Constant(
+                                         value=self.init_betas),
                                      # initializer='ones',
                                      trainable=True)
 

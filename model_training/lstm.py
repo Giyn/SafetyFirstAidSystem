@@ -105,10 +105,15 @@ def train_data(X_train, y_train, X_test, y_test):
     model = tf.keras.Sequential()
 
     # the hidden layer
-    model.add(layers.LSTM(units=200, return_sequences=True, input_shape=(128, 6), use_bias=True, dropout=DROP_OUT1,
-                          kernel_regularizer=tf.keras.regularizers.l2(0.01), unit_forget_bias=True))
-    model.add(layers.LSTM(units=52, input_shape=(128, 6), use_bias=True, dropout=DROP_OUT2,
-                          kernel_regularizer=tf.keras.regularizers.l2(0.01), unit_forget_bias=True))
+    model.add(
+        layers.LSTM(units=200, return_sequences=True, input_shape=(128, 6),
+                    use_bias=True, dropout=DROP_OUT1,
+                    kernel_regularizer=tf.keras.regularizers.l2(0.01),
+                    unit_forget_bias=True))
+    model.add(layers.LSTM(units=52, input_shape=(128, 6), use_bias=True,
+                          dropout=DROP_OUT2,
+                          kernel_regularizer=tf.keras.regularizers.l2(0.01),
+                          unit_forget_bias=True))
 
     # the output layer
     model.add(layers.Dense(13, activation='softmax', use_bias=True))
@@ -122,7 +127,8 @@ def train_data(X_train, y_train, X_test, y_test):
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', patience=10, mode='auto')
 
     history = model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE,
-                        validation_data=(X_test, y_test), validation_freq=1, callbacks=[reduce_lr], shuffle=True,
+                        validation_data=(X_test, y_test), validation_freq=1,
+                        callbacks=[reduce_lr], shuffle=True,
                         workers=2)
 
     model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
@@ -153,7 +159,8 @@ if __name__ == "__main__":
     print("----Start----")
 
     # read the csv
-    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'],
+                                                             axis=1)
     df = df.reindex(np.random.permutation(df.index))[:NUM]  # random the data
 
     # data preprocess
@@ -163,7 +170,10 @@ if __name__ == "__main__":
     data, y_new = data_preprocess(data, label)
 
     # split the data
-    X_train, X_test, y_train, y_test = model_selection.train_test_split(data, y_new, shuffle=False, test_size=0.3)
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(data,
+                                                                        y_new,
+                                                                        shuffle=False,
+                                                                        test_size=0.3)
 
     # train the model
     model, history = train_data(X_train, y_train, X_test, y_test)

@@ -85,7 +85,8 @@ def evaluate(model, data, y_new):
 if __name__ == "__main__":
     print("----Start----")
 
-    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data2.csv').drop(['x', 'id'],
+                                                              axis=1)
     df = df.reindex(np.random.permutation(df.index))[:1000]  # random the data
 
     # data preprocess
@@ -95,7 +96,8 @@ if __name__ == "__main__":
     data, y_new = data_preprocess(data, label)
 
     model = tf.keras.Sequential()
-    model = tf.keras.models.load_model(r'../model/BP_5.h5', custom_objects={'RBFLayer': RBFLayer})
+    model = tf.keras.models.load_model(r'../model/BP_5.h5',
+                                       custom_objects={'RBFLayer': RBFLayer})
     # np.set_printoptions(precision=4)
 
     evaluate(model, data, y_new)

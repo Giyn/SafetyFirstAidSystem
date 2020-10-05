@@ -82,7 +82,8 @@ def evaluate(model, y_new):
 
 if __name__ == "__main__":
     print("----Start----")
-    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'], axis=1)
+    df = pd.read_csv(r'../data/deleted_total_data.csv').drop(['x', 'id'],
+                                                             axis=1)
     df = df.reindex(np.random.permutation(df.index))[:1000]  # random the data
 
     # data preprocess
