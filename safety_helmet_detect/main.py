@@ -1,11 +1,10 @@
 import argparse
-
 import torch.backends.cudnn as cudnn
-
 from models.experimental import *
 from utils.datasets import *
 from utils.utils import *
 from control import Control
+
 
 def detect(save_img=False):
     source = '0'
@@ -19,9 +18,6 @@ def detect(save_img=False):
     iou_thres = 0.5
 
     con = Control("COM4")
-
-
-
 
     # Initialize
     device = torch.device('cpu')
@@ -39,21 +35,19 @@ def detect(save_img=False):
     view_img = True
     dataset = LoadStreams(source, img_size=imgsz)
 
-
-
-
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
-    colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
+    colors = [[random.randint(0, 255) for _ in range(3)] for _ in
+              range(len(names))]
     half = False
     # Run inference
     t0 = time.time()
     # img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
     # _ = model(img.half() if half else img) if device.type != 'cpu' else None  # run once
-    n =0
+    n = 0
     for path, img, im0s, vid_cap in dataset:
-        n = n+1
-        if n%2 == 0:
+        n = n + 1
+        if n % 2 == 0:
             continue
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -66,9 +60,9 @@ def detect(save_img=False):
         pred = model(img, augment=False)[0]
 
         # Apply NMS
-        pred = non_max_suppression(pred, conf_thres, iou_thres, classes=None, agnostic=False)
+        pred = non_max_suppression(pred, conf_thres, iou_thres, classes=None,
+                                   agnostic=False)
         t2 = torch_utils.time_synchronized()
-
 
         for i, det in enumerate(pred):  # detections per image
             if webcam:  # batch_size >= 1
@@ -77,12 +71,15 @@ def detect(save_img=False):
                 p, s, im0 = path, '', im0s
 
             save_path = str(Path(out) / Path(p).name)
-            txt_path = str(Path(out) / Path(p).stem) + ('_%g' % dataset.frame if dataset.mode == 'video' else '')
+            txt_path = str(Path(out) / Path(p).stem) + (
+                '_%g' % dataset.frame if dataset.mode == 'video' else '')
             s += '%gx%g ' % img.shape[2:]  # print string
-            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
+            gn = torch.tensor(im0.shape)[
+                [1, 0, 1, 0]]  # normalization gain whwh
             if det is not None and len(det):
                 # Rescale boxes from img_size to im0 size
-                det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
+                det[:, :4] = scale_coords(img.shape[2:], det[:, :4],
+                                          im0.shape).round()
 
                 # Print results
                 for c in det[:, -1].unique():
@@ -93,23 +90,30 @@ def detect(save_img=False):
                 size = 0
                 for *xyxy, conf, cls in det:
                     if save_txt:  # Write to file
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
+                        xywh = (xyxy2xywh(
+                            torch.tensor(xyxy).view(1, 4)) / gn).view(
+                            -1).tolist()  # normalized xywh
                         with open(txt_path + '.txt', 'a') as f:
-                            f.write(('%g ' * 5 + '\n') % (cls, *xywh))  # label format
+                            f.write(('%g ' * 5 + '\n') % (
+                                cls, *xywh))  # label format
 
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
-                        plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
-                        width = int(xyxy[2].cpu().detach().numpy())-int(xyxy[0].cpu().detach().numpy())
-                        height = int(xyxy[3].cpu().detach().numpy()) - int(xyxy[1].cpu().detach().numpy())
+                        plot_one_box(xyxy, im0, label=label,
+                                     color=colors[int(cls)], line_thickness=3)
+                        width = int(xyxy[2].cpu().detach().numpy()) - int(
+                            xyxy[0].cpu().detach().numpy())
+                        height = int(xyxy[3].cpu().detach().numpy()) - int(
+                            xyxy[1].cpu().detach().numpy())
 
-                        s_temp = width*height
+                        s_temp = width * height
 
-
-                        if s_temp>size:
+                        if s_temp > size:
                             size = s_temp
-                            x = (int(xyxy[0].cpu().detach().numpy()) + int(xyxy[2].cpu().detach().numpy())) // 2
-                            y = (int(xyxy[1].cpu().detach().numpy()) + int(xyxy[3].cpu().detach().numpy())) // 2
+                            x = (int(xyxy[0].cpu().detach().numpy()) + int(
+                                xyxy[2].cpu().detach().numpy())) // 2
+                            y = (int(xyxy[1].cpu().detach().numpy()) + int(
+                                xyxy[3].cpu().detach().numpy())) // 2
 
                             print(x, y, xyxy)
 
@@ -123,13 +127,8 @@ def detect(save_img=False):
                 if cv2.waitKey(1) == ord('q'):  # q to quit
                     raise StopIteration
 
-
-
     print('Done. (%.3fs)' % (time.time() - t0))
 
 
 if __name__ == '__main__':
-
-
-
     detect()
