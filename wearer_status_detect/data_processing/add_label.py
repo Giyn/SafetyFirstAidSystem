@@ -36,6 +36,9 @@ if __name__ == '__main__':
     dataSet_lie = load_data("../data/data_generated_by_QG/lable1躺.txt", 1)
     dataSet_walk = load_data("../data/data_generated_by_QG/lable2走.txt", 2)
     dataSet_run = load_data("../data/data_generated_by_QG/lable3跑.txt", 3)
+
+    dataSet_sit = dataSet_sit[~dataSet_sit['feature_1'].isin([0.0])]
+
     dataSet_sit['label'] = dataSet_sit['label'].map(lambda x: int(x))
     dataSet_lie['label'] = dataSet_lie['label'].map(lambda x: int(x))
     dataSet_walk['label'] = dataSet_walk['label'].map(lambda x: int(x))
