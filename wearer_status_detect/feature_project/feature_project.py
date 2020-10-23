@@ -20,7 +20,8 @@ for num in range(13):
         for j in range(1024):
             # open the data
 
-            fr = pd.read_csv(path, encoding='utf-8')[13072 * n + 128 * j:13072 * n + 128 * (j + 1)]
+            fr = pd.read_csv(path, encoding='utf-8')[
+                 13072 * n + 128 * j:13072 * n + 128 * (j + 1)]
 
             # the shape 1 of data
             df_length = fr.shape[0]
@@ -30,27 +31,51 @@ for num in range(13):
 
             # create a new dataframe to store new feature
             add_dataframe = pd.DataFrame(data=np.zeros((df_length, 74)),
-                                         columns=['acc_sum', 'gry_sum', 'acc_x_sd', 'acc_y_sd', 'acc_z_sd', 'gry_x_sd',
+                                         columns=['acc_sum', 'gry_sum',
+                                                  'acc_x_sd', 'acc_y_sd',
+                                                  'acc_z_sd', 'gry_x_sd',
                                                   'gry_y_sd'
-                                             , 'gry_z_sd', 'acc_x_range', 'acc_y_range', 'acc_z_range', 'gry_x_range',
+                                             , 'gry_z_sd', 'acc_x_range',
+                                                  'acc_y_range', 'acc_z_range',
+                                                  'gry_x_range',
                                                   'gry_y_range'
-                                             , 'gry_z_range', 'acc_x_per25', 'acc_x_per50', 'acc_x_per75',
+                                             , 'gry_z_range', 'acc_x_per25',
+                                                  'acc_x_per50', 'acc_x_per75',
                                                   'acc_x_persub',
-                                                  'acc_y_per25', 'acc_y_per50', 'acc_y_per75', 'acc_y_persub',
-                                                  'acc_z_per25', 'acc_z_per50', 'acc_z_per75', 'acc_z_persub',
-                                                  'gry_x_per25', 'gry_x_per50', 'gry_x_per75', 'gry_x_persub',
-                                                  'gry_y_per25', 'gry_y_per50', 'gry_y_per75', 'gry_y_persub',
-                                                  'gry_z_per25', 'gry_z_per50', 'gry_z_per75', 'gry_z_persub',
-                                                  'acc_x_cor', 'acc_y_cor', 'acc_z_cor', 'gry_x_cor', 'gry_y_cor',
-                                                  'gry_z_cor', 'acc_x_skew', 'acc_y_skew', 'acc_z_skew', 'gry_x_skew',
+                                                  'acc_y_per25', 'acc_y_per50',
+                                                  'acc_y_per75', 'acc_y_persub',
+                                                  'acc_z_per25', 'acc_z_per50',
+                                                  'acc_z_per75', 'acc_z_persub',
+                                                  'gry_x_per25', 'gry_x_per50',
+                                                  'gry_x_per75', 'gry_x_persub',
+                                                  'gry_y_per25', 'gry_y_per50',
+                                                  'gry_y_per75', 'gry_y_persub',
+                                                  'gry_z_per25', 'gry_z_per50',
+                                                  'gry_z_per75', 'gry_z_persub',
+                                                  'acc_x_cor', 'acc_y_cor',
+                                                  'acc_z_cor', 'gry_x_cor',
+                                                  'gry_y_cor',
+                                                  'gry_z_cor', 'acc_x_skew',
+                                                  'acc_y_skew', 'acc_z_skew',
+                                                  'gry_x_skew',
                                                   'gry_y_skew',
-                                                  'gry_z_skew', 'acc_x_engy', 'acc_y_engy', 'acc_z_engy', 'gry_x_engy',
+                                                  'gry_z_skew', 'acc_x_engy',
+                                                  'acc_y_engy', 'acc_z_engy',
+                                                  'gry_x_engy',
                                                   'gry_y_engy',
-                                                  'gry_z_engy', 'acc_x_log_engy', 'acc_y_log_engy', 'acc_z_log_engy',
-                                                  'gry_x_log_engy', 'gry_y_log_engy',
-                                                  'gry_z_log_engy', 'acc_x_poz', 'acc_y_poz', 'acc_z_poz', 'gry_x_poz',
+                                                  'gry_z_engy',
+                                                  'acc_x_log_engy',
+                                                  'acc_y_log_engy',
+                                                  'acc_z_log_engy',
+                                                  'gry_x_log_engy',
+                                                  'gry_y_log_engy',
+                                                  'gry_z_log_engy', 'acc_x_poz',
+                                                  'acc_y_poz', 'acc_z_poz',
+                                                  'gry_x_poz',
                                                   'gry_y_poz', 'gry_z_poz',
-                                                  'acc_xy_cor', 'acc_xz_cor', 'acc_yz_cor', 'gry_xy_cor', 'gry_xz_cor',
+                                                  'acc_xy_cor', 'acc_xz_cor',
+                                                  'acc_yz_cor', 'gry_xy_cor',
+                                                  'gry_xz_cor',
                                                   'gry_yz_cor'])
 
             acc_x_total = np.array(fr.loc[:]['acc_01'])
@@ -167,7 +192,8 @@ for num in range(13):
             gry_z_poz = 0
 
             for i in range(df_length):
-                print('第(' + str(13072 * n + 128 * j + i + 1) + '/' + str(df_total_length) + ')次读取')
+                print('第(' + str(13072 * n + 128 * j + i + 1) + '/' + str(
+                    df_total_length) + ')次读取')
 
                 # calc the sum of acc vec
                 acc_x = fr.iloc[i]['acc_01']
@@ -193,12 +219,18 @@ for num in range(13):
 
                 # first order lag correlaation
                 if i != 0:
-                    tempacc_cor_x1 += (acc_x - acc_x_total_avg) * (fr.iloc[i - 1]['acc_01'] - acc_x_total_avg)
-                    tempacc_cor_y1 += (acc_y - acc_y_total_avg) * (fr.iloc[i - 1]['acc_02'] - acc_y_total_avg)
-                    tempacc_cor_z1 += (acc_z - acc_z_total_avg) * (fr.iloc[i - 1]['acc_03'] - acc_z_total_avg)
-                    tempgry_cor_x1 += (gry_x - gry_x_total_avg) * (fr.iloc[i - 1]['gry_01'] - gry_x_total_avg)
-                    tempgry_cor_y1 += (gry_y - gry_y_total_avg) * (fr.iloc[i - 1]['gry_02'] - gry_y_total_avg)
-                    tempgry_cor_z1 += (gry_z - gry_z_total_avg) * (fr.iloc[i - 1]['gry_03'] - gry_z_total_avg)
+                    tempacc_cor_x1 += (acc_x - acc_x_total_avg) * (
+                                fr.iloc[i - 1]['acc_01'] - acc_x_total_avg)
+                    tempacc_cor_y1 += (acc_y - acc_y_total_avg) * (
+                                fr.iloc[i - 1]['acc_02'] - acc_y_total_avg)
+                    tempacc_cor_z1 += (acc_z - acc_z_total_avg) * (
+                                fr.iloc[i - 1]['acc_03'] - acc_z_total_avg)
+                    tempgry_cor_x1 += (gry_x - gry_x_total_avg) * (
+                                fr.iloc[i - 1]['gry_01'] - gry_x_total_avg)
+                    tempgry_cor_y1 += (gry_y - gry_y_total_avg) * (
+                                fr.iloc[i - 1]['gry_02'] - gry_y_total_avg)
+                    tempgry_cor_z1 += (gry_z - gry_z_total_avg) * (
+                                fr.iloc[i - 1]['gry_03'] - gry_z_total_avg)
 
                 tempacc_cor_x2 += (acc_x - acc_x_total_avg) ** 2
                 tempacc_cor_y2 += (acc_x - acc_y_total_avg) ** 2
@@ -266,7 +298,8 @@ for num in range(13):
             add_dataframe.iloc[:]['acc_x_per50'] = acc_x_total_median
             add_dataframe.iloc[:]['acc_x_per25'] = acc_x_25_perc
             add_dataframe.iloc[:]['acc_x_per75'] = acc_x_75_perc
-            add_dataframe.iloc[:]['acc_x_persub'] = acc_x_75_perc - acc_x_25_perc
+            add_dataframe.iloc[:][
+                'acc_x_persub'] = acc_x_75_perc - acc_x_25_perc
 
             add_dataframe.iloc[:]['acc_y_per50'] = acc_y_total_median
             add_dataframe.iloc[:]['acc_y_per25'] = acc_y_25_perc
@@ -300,12 +333,18 @@ for num in range(13):
             add_dataframe.loc[:]['gry_y_cor'] = tempgry_cor_y1 / tempgry_cor_y2
             add_dataframe.loc[:]['gry_z_cor'] = tempgry_cor_z1 / tempgry_cor_z2
 
-            add_dataframe.loc[:]['acc_x_skew'] = tempacc_skew_x1 / tempacc_skew_x2
-            add_dataframe.loc[:]['acc_y_skew'] = tempacc_skew_y1 / tempacc_skew_y2
-            add_dataframe.loc[:]['acc_z_skew'] = tempacc_skew_z1 / tempacc_skew_z2
-            add_dataframe.loc[:]['gry_x_skew'] = tempgry_skew_x1 / tempgry_skew_x2
-            add_dataframe.loc[:]['gry_y_skew'] = tempgry_skew_y1 / tempgry_skew_y2
-            add_dataframe.loc[:]['gry_z_skew'] = tempgry_skew_z1 / tempgry_skew_z2
+            add_dataframe.loc[:][
+                'acc_x_skew'] = tempacc_skew_x1 / tempacc_skew_x2
+            add_dataframe.loc[:][
+                'acc_y_skew'] = tempacc_skew_y1 / tempacc_skew_y2
+            add_dataframe.loc[:][
+                'acc_z_skew'] = tempacc_skew_z1 / tempacc_skew_z2
+            add_dataframe.loc[:][
+                'gry_x_skew'] = tempgry_skew_x1 / tempgry_skew_x2
+            add_dataframe.loc[:][
+                'gry_y_skew'] = tempgry_skew_y1 / tempgry_skew_y2
+            add_dataframe.loc[:][
+                'gry_z_skew'] = tempgry_skew_z1 / tempgry_skew_z2
 
             add_dataframe.loc[:]['acc_x_engy'] = acc_x_engy
             add_dataframe.loc[:]['acc_y_engy'] = acc_y_engy
@@ -335,38 +374,60 @@ for num in range(13):
             gry_y_total_pd = pd.Series(gry_y_total)
             gry_z_total_pd = pd.Series(gry_z_total)
 
-            add_dataframe.loc[:]['acc_xz_cor'] = acc_x_total_pd.corr(acc_z_total_pd)
-            add_dataframe.loc[:]['acc_yz_cor'] = acc_y_total_pd.corr(acc_z_total_pd)
-            add_dataframe.loc[:]['acc_xy_cor'] = acc_x_total_pd.corr(acc_y_total_pd)
-            add_dataframe.loc[:]['gry_xz_cor'] = gry_x_total_pd.corr(gry_z_total_pd)
-            add_dataframe.loc[:]['gry_yz_cor'] = gry_y_total_pd.corr(gry_z_total_pd)
-            add_dataframe.loc[:]['gry_xy_cor'] = gry_x_total_pd.corr(gry_y_total_pd)
+            add_dataframe.loc[:]['acc_xz_cor'] = acc_x_total_pd.corr(
+                acc_z_total_pd)
+            add_dataframe.loc[:]['acc_yz_cor'] = acc_y_total_pd.corr(
+                acc_z_total_pd)
+            add_dataframe.loc[:]['acc_xy_cor'] = acc_x_total_pd.corr(
+                acc_y_total_pd)
+            add_dataframe.loc[:]['gry_xz_cor'] = gry_x_total_pd.corr(
+                gry_z_total_pd)
+            add_dataframe.loc[:]['gry_yz_cor'] = gry_y_total_pd.corr(
+                gry_z_total_pd)
+            add_dataframe.loc[:]['gry_xy_cor'] = gry_x_total_pd.corr(
+                gry_y_total_pd)
 
             # res = pd.concat([fr,add_dataframe],axis=1)
-            path2 = '../data/processed_data/add_data' + str(n + 1) + '_' + str(num) + '.csv'
+            path2 = '../data/processed_data/add_data' + str(n + 1) + '_' + str(
+                num) + '.csv'
             flag_csv = os.path.isfile(path2)
 
             with open(path2, 'a', newline='') as f:
                 writer = csv.writer(f)
                 if not flag_csv:
                     writer.writerow(
-                        ['id', 'x', 'label', 'acc_01', 'acc_02', 'acc_03', 'gry_01', 'gry_02', 'gry_03', 'acc_sum',
+                        ['id', 'x', 'label', 'acc_01', 'acc_02', 'acc_03',
+                         'gry_01', 'gry_02', 'gry_03', 'acc_sum',
                          'gry_sum',
-                         'acc_x_sd', 'acc_y_sd', 'acc_z_sd', 'gry_x_sd', 'gry_y_sd'
-                            , 'gry_z_sd', 'acc_x_range', 'acc_y_range', 'acc_z_range', 'gry_x_range', 'gry_y_range'
-                            , 'gry_z_range', 'acc_x_per25', 'acc_x_per50', 'acc_x_per75', 'acc_x_persub',
-                         'acc_y_per25', 'acc_y_per50', 'acc_y_per75', 'acc_y_persub',
-                         'acc_z_per25', 'acc_z_per50', 'acc_z_per75', 'acc_z_persub',
-                         'gry_x_per25', 'gry_x_per50', 'gry_x_per75', 'gry_x_persub',
-                         'gry_y_per25', 'gry_y_per50', 'gry_y_per75', 'gry_y_persub',
-                         'gry_z_per25', 'gry_z_per50', 'gry_z_per75', 'gry_z_persub',
-                         'acc_x_cor', 'acc_y_cor', 'acc_z_cor', 'gry_x_cor', 'gry_y_cor',
-                         'gry_z_cor', 'acc_x_skew', 'acc_y_skew', 'acc_z_skew', 'gry_x_skew', 'gry_y_skew',
-                         'gry_z_skew', 'acc_x_engy', 'acc_y_engy', 'acc_z_engy', 'gry_x_engy', 'gry_y_engy',
-                         'gry_z_engy', 'acc_x_log_engy', 'acc_y_log_engy', 'acc_z_log_engy', 'gry_x_log_engy',
+                         'acc_x_sd', 'acc_y_sd', 'acc_z_sd', 'gry_x_sd',
+                         'gry_y_sd'
+                            , 'gry_z_sd', 'acc_x_range', 'acc_y_range',
+                         'acc_z_range', 'gry_x_range', 'gry_y_range'
+                            , 'gry_z_range', 'acc_x_per25', 'acc_x_per50',
+                         'acc_x_per75', 'acc_x_persub',
+                         'acc_y_per25', 'acc_y_per50', 'acc_y_per75',
+                         'acc_y_persub',
+                         'acc_z_per25', 'acc_z_per50', 'acc_z_per75',
+                         'acc_z_persub',
+                         'gry_x_per25', 'gry_x_per50', 'gry_x_per75',
+                         'gry_x_persub',
+                         'gry_y_per25', 'gry_y_per50', 'gry_y_per75',
+                         'gry_y_persub',
+                         'gry_z_per25', 'gry_z_per50', 'gry_z_per75',
+                         'gry_z_persub',
+                         'acc_x_cor', 'acc_y_cor', 'acc_z_cor', 'gry_x_cor',
+                         'gry_y_cor',
+                         'gry_z_cor', 'acc_x_skew', 'acc_y_skew', 'acc_z_skew',
+                         'gry_x_skew', 'gry_y_skew',
+                         'gry_z_skew', 'acc_x_engy', 'acc_y_engy', 'acc_z_engy',
+                         'gry_x_engy', 'gry_y_engy',
+                         'gry_z_engy', 'acc_x_log_engy', 'acc_y_log_engy',
+                         'acc_z_log_engy', 'gry_x_log_engy',
                          'gry_y_log_engy',
-                         'gry_z_log_engy', 'acc_x_poz', 'acc_y_poz', 'acc_z_poz', 'gry_x_poz', 'gry_y_poz', 'gry_z_poz',
-                         'acc_xy_cor', 'acc_xz_cor', 'acc_yz_cor', 'gry_xy_cor', 'gry_xz_cor', 'gry_yz_cor'])
+                         'gry_z_log_engy', 'acc_x_poz', 'acc_y_poz',
+                         'acc_z_poz', 'gry_x_poz', 'gry_y_poz', 'gry_z_poz',
+                         'acc_xy_cor', 'acc_xz_cor', 'acc_yz_cor', 'gry_xy_cor',
+                         'gry_xz_cor', 'gry_yz_cor'])
 
                 for i in range(df_length):
                     data = list(fr.iloc[i][:]) + list(add_dataframe.iloc[i][:])
