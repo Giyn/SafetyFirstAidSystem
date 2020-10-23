@@ -16,12 +16,13 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from sklearn import model_selection
+from rbflayer import RBFLayer, InitCentersRandom
 
 # use gpu 1
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-LR = 0.0001  # learning rate
-EPOCHS = 100
+LR = 0.000001  # learning rate
+EPOCHS = 50
 BATCH_SIZE = 100
 
 
@@ -44,14 +45,15 @@ def data_preprocessing(feature, label):
 
     label_list = []
     for line in label:
-        temp = [0, 0, 0, 0]
+        temp = [0, 0, 0]
         temp[int(line) - 1] = 1
         label_list.append(temp)
 
     label_list = np.array(label_list)
-    label_list = label_list.reshape(-1, 4)
-    result_view = pd.DataFrame(label_list)
-    result_view.to_csv('../label_test/result_view.txt', sep='\t', index=False)
+    label_list = label_list.reshape(-1, 3)
+    predicted_result = pd.DataFrame(label_list)
+    predicted_result.to_csv('../label_test/predicted_label.txt', sep='\t',
+                            index=False)
 
     return feature, label_list
 
@@ -69,7 +71,7 @@ def train_data(X_train, y_train, X_test, y_test):
         history: the log of training
 
     """
-    model = tf.keras.Sequential()
+    # model = tf.keras.Sequential()
 
     # rbflayer = RBFLayer(9,
     #                     initializer=InitCentersRandom(X_train),
@@ -77,23 +79,23 @@ def train_data(X_train, y_train, X_test, y_test):
     #                     input_shape=(6,))
     # model.add(rbflayer)
 
-    model.add(tf.keras.layers.Dense(100,
-                                    kernel_regularizer=tf.keras.regularizers.l2(
-                                        0.001), activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.2))
-    model.add(tf.keras.layers.Dense(50,
-                                    kernel_regularizer=tf.keras.regularizers.l2(
-                                        0.001), activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.2))
-    model.add(tf.keras.layers.Dense(4,
-                                    kernel_regularizer=tf.keras.regularizers.l2(
-                                        0.001), activation='sigmoid'))
-    model.compile(optimizer=tf.keras.optimizers.Adam(LR),
-                  loss=tf.keras.losses.binary_crossentropy,
-                  metrics=[tf.keras.metrics.categorical_accuracy])
+    # model.add(tf.keras.layers.Dense(100,
+    #                                 kernel_regularizer=tf.keras.regularizers.l2(
+    #                                     0.001), activation='relu'))
+    # model.add(tf.keras.layers.Dropout(0.2))
+    # model.add(tf.keras.layers.Dense(50,
+    #                                 kernel_regularizer=tf.keras.regularizers.l2(
+    #                                     0.001), activation='relu'))
+    # model.add(tf.keras.layers.Dropout(0.2))
+    # model.add(tf.keras.layers.Dense(3,
+    #                                 kernel_regularizer=tf.keras.regularizers.l2(
+    #                                     0.001), activation='sigmoid'))
+    # model.compile(optimizer=tf.keras.optimizers.Adam(LR),
+    #               loss=tf.keras.losses.binary_crossentropy,
+    #               metrics=[tf.keras.metrics.categorical_accuracy])
 
-    # model = tf.keras.models.load_model("../model/RBF_QG.h5",
-    #                                    custom_objects={'RBFLayer': RBFLayer})
+    model = tf.keras.models.load_model("../model/RBF_QG.h5",
+                                       custom_objects={'RBFLayer': RBFLayer})
 
     history = model.fit(X_train, y_train, validation_data=(X_test, y_test),
                         batch_size=BATCH_SIZE, epochs=EPOCHS)
