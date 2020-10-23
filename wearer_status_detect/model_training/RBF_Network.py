@@ -21,7 +21,7 @@ from rbflayer import RBFLayer, InitCentersRandom
 # use gpu 1
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-LR = 0.000001  # learning rate
+LR = 0.00001  # learning rate
 EPOCHS = 50
 BATCH_SIZE = 100
 
@@ -72,13 +72,13 @@ def train_data(X_train, y_train, X_test, y_test):
 
     """
     # model = tf.keras.Sequential()
-
+    #
     # rbflayer = RBFLayer(9,
     #                     initializer=InitCentersRandom(X_train),
     #                     betas=2.0,
     #                     input_shape=(6,))
     # model.add(rbflayer)
-
+    #
     # model.add(tf.keras.layers.Dense(100,
     #                                 kernel_regularizer=tf.keras.regularizers.l2(
     #                                     0.001), activation='relu'))
