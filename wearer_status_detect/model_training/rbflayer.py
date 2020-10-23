@@ -1,18 +1,10 @@
-"""
--------------------------------------------------
-# @Time: 2020/9/28 9:50
-# @File: rbflayer
-# @Software: PyCharm
--------------------------------------------------
-"""
-import random
-
-from tensorflow.keras import backend as K
-from tensorflow.keras.layers import Layer
-from sklearn.cluster import KMeans
-from tensorflow.keras.initializers import RandomUniform, Initializer, \
-    Orthogonal, Constant
 import numpy as np
+from sklearn.cluster import KMeans
+from tensorflow.keras import backend as K
+from tensorflow.keras.initializers import Constant
+from tensorflow.keras.initializers import Initializer
+from tensorflow.keras.initializers import RandomUniform
+from tensorflow.keras.layers import Layer
 
 
 class InitCentersRandom(Initializer):
@@ -23,11 +15,12 @@ class InitCentersRandom(Initializer):
           are taken as centers)
     """
 
-    def __init__(self, X, samples_num=10):
+    def __init__(self, X, samples_num=9):
         self.X = X
         self.samples_num = samples_num
 
     def __call__(self, shape, dtype=None):
+        assert shape[1] == self.X.shape[1]
         idx = np.random.randint(self.X.shape[0], size=self.samples_num)
         return self.X[idx, :]
 
@@ -87,7 +80,6 @@ class RBFLayer(Layer):
                                      shape=(self.num_outputs,),
                                      initializer=Constant(
                                          value=self.init_betas),
-                                     # initializer='ones',
                                      trainable=True)
 
         super(RBFLayer, self).build(input_shape)
@@ -97,13 +89,6 @@ class RBFLayer(Layer):
         C = K.expand_dims(self.centers)
         H = K.transpose(C - K.transpose(x))
         return K.exp(-self.betas * K.sum(H ** 2, axis=1))
-
-        # C = self.centers[np.newaxis, :, :]
-        # X = x[:, np.newaxis, :]
-
-        # diffnorm = K.sum((C-X)**2, axis=-1)
-        # ret = K.exp( - self.betas * diffnorm)
-        # return ret
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.num_outputs)
