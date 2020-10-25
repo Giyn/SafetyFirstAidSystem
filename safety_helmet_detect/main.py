@@ -1,9 +1,7 @@
-import argparse
-import torch.backends.cudnn as cudnn
+from control import Control
 from models.experimental import *
 from utils.datasets import *
 from utils.utils import *
-from control import Control
 
 
 def detect(save_img=False):
@@ -17,7 +15,7 @@ def detect(save_img=False):
     conf_thres = 0.4
     iou_thres = 0.5
 
-    con = Control("COM4")
+    con = Control("COM3")
 
     # Initialize
     device = torch.device('cpu')
@@ -95,7 +93,7 @@ def detect(save_img=False):
                             -1).tolist()  # normalized xywh
                         with open(txt_path + '.txt', 'a') as f:
                             f.write(('%g ' * 5 + '\n') % (
-                                cls, *xywh))  # label format
+                            cls, *xywh))  # label format
 
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
@@ -117,9 +115,12 @@ def detect(save_img=False):
 
                             print(x, y, xyxy)
 
-            # Print time (inference + NMS)
-            print('%sDone. (%.3fs)' % (s, t2 - t1))
-            con.update(y, x)
+                # Print time (inference + NMS)
+                print('%sDone. (%.3fs)' % (s, t2 - t1))
+                try:
+                    con.update(y, x)
+                except:
+                    pass
 
             # Stream results
             if view_img:
