@@ -21,7 +21,7 @@ from rbflayer import RBFLayer, InitCentersRandom
 # use gpu 1
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-LR = 0.00001  # learning rate
+LR = 0.001  # learning rate
 EPOCHS = 50
 BATCH_SIZE = 100
 
@@ -71,36 +71,36 @@ def train_data(X_train, y_train, X_test, y_test):
         history: the log of training
 
     """
-    # model = tf.keras.Sequential()
-    #
+    model = tf.keras.Sequential()
+
     # rbflayer = RBFLayer(9,
     #                     initializer=InitCentersRandom(X_train),
     #                     betas=2.0,
     #                     input_shape=(6,))
     # model.add(rbflayer)
-    #
-    # model.add(tf.keras.layers.Dense(100,
-    #                                 kernel_regularizer=tf.keras.regularizers.l2(
-    #                                     0.001), activation='relu'))
-    # model.add(tf.keras.layers.Dropout(0.2))
-    # model.add(tf.keras.layers.Dense(50,
-    #                                 kernel_regularizer=tf.keras.regularizers.l2(
-    #                                     0.001), activation='relu'))
-    # model.add(tf.keras.layers.Dropout(0.2))
-    # model.add(tf.keras.layers.Dense(3,
-    #                                 kernel_regularizer=tf.keras.regularizers.l2(
-    #                                     0.001), activation='sigmoid'))
-    # model.compile(optimizer=tf.keras.optimizers.Adam(LR),
-    #               loss=tf.keras.losses.binary_crossentropy,
-    #               metrics=[tf.keras.metrics.categorical_accuracy])
 
-    model = tf.keras.models.load_model("../model/RBF_QG.h5",
-                                       custom_objects={'RBFLayer': RBFLayer})
+    model.add(tf.keras.layers.Dense(100,
+                                    kernel_regularizer=tf.keras.regularizers.l2(
+                                        0.001), activation='relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(50,
+                                    kernel_regularizer=tf.keras.regularizers.l2(
+                                        0.001), activation='relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(3,
+                                    kernel_regularizer=tf.keras.regularizers.l2(
+                                        0.001), activation='sigmoid'))
+    model.compile(optimizer=tf.keras.optimizers.Adam(LR),
+                  loss=tf.keras.losses.binary_crossentropy,
+                  metrics=[tf.keras.metrics.categorical_accuracy])
+
+    # model = tf.keras.models.load_model("../model/RBF_QG.h5",
+    #                                    custom_objects={'RBFLayer': RBFLayer})
 
     history = model.fit(X_train, y_train, validation_data=(X_test, y_test),
                         batch_size=BATCH_SIZE, epochs=EPOCHS)
     model.evaluate(X_test, y_test, batch_size=BATCH_SIZE)
-    tf.keras.models.save_model(model=model, filepath="../model/RBF_QG.h5")
+    tf.keras.models.save_model(model=model, filepath="../model/RBF_QG_2.h5")
 
     return model, history
 
