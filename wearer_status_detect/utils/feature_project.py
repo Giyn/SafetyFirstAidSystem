@@ -15,6 +15,19 @@ from sklearn.utils import shuffle
 
 
 def sliding_window(load_data_path, label, step):
+    """
+
+    Use sliding window method to make data.
+
+    Args:
+        load_data_path(str): raw data path
+        label(int): data label
+        step(int): the step of sliding window method
+
+    Returns:
+        df: new data(DataFrame)
+
+    """
     dataSet_sit = pd.read_csv(load_data_path)
 
     new_dataSet_list = []
